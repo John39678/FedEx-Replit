@@ -1,21 +1,20 @@
 {
   "name": "FedEx Equipment Audit",
-  "short_name": "FedEx Audit",
-  "description": "Equipment auditing application for FedEx",
-  "start_url": "/",
+  "short_name": "FedExAudit",
+  "start_url": ".",
   "display": "standalone",
-  "background_color": "#4D148C",
-  "theme_color": "#4D148C",
+  "background_color": "#4d148c",
+  "theme_color": "#4d148c",
   "icons": [
     {
-      "src": "icon-192.png",
-      "type": "image/png",
-      "sizes": "192x192"
+      "src": "icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
     },
     {
-      "src": "icon-512.png",
-      "type": "image/png",
-      "sizes": "512x512"
+      "src": "icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }
