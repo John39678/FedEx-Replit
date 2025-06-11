@@ -1,252 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>FedEx Equipment Audit</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="manifest" href="manifest.json">
-  <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/html5-qrcode"></script>
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icon.png" />
+  <meta name="theme-color" content="#4d148c"/>
   <style>
     body {
       font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #4d148c, #000000);
+      color: white;
       padding: 20px;
-      max-width: 800px;
-      margin: 0 auto;
-      background-color: #f5f5f5;
-    }
-    .container {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
     }
     h1 {
-      color: #4d148c;
-      text-align: center;
+      font-size: 2rem;
     }
-    .input-row {
-      margin-bottom: 15px;
-      padding: 10px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
+    .section {
+      margin-bottom: 30px;
     }
     input[type="text"], input[type="number"] {
-      width: 70%;
       padding: 8px;
-      margin-right: 5px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      margin-right: 10px;
+      width: 200px;
     }
     button {
       padding: 8px 12px;
-      background-color: #4d148c;
+      background-color: #ff6600;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       cursor: pointer;
-      margin-right: 5px;
-    }
-    button:hover {
-      background-color: #6a1b9a;
     }
     ul {
       list-style-type: none;
-      padding: 0;
-      margin-top: 10px;
+      padding-left: 0;
     }
     li {
-      padding: 5px;
-      background-color: #f0f0f0;
-      margin-bottom: 5px;
-      border-radius: 3px;
+      background: rgba(255,255,255,0.1);
+      margin: 4px 0;
+      padding: 6px;
+      border-radius: 4px;
     }
-    #camera-modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.85);
-      z-index: 9999;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-    }
-    #scanner {
-      width: 100%;
+    #app {
       max-width: 500px;
-      aspect-ratio: 1;
-      background: black;
     }
   </style>
 </head>
 <body>
-  <div class="container">
+  <div id="app">
     <h1>FedEx Equipment Audit</h1>
 
-    <!-- Radios -->
-    <div class="input-row">
-      <input type="text" id="radio-input" placeholder="Enter Radio Serial">
-      <button onclick="addSerial('radio')">Add</button>
-      <button onclick="scanSerial('radio')">Scan</button>
-      <ul id="radio-list"></ul>
+    <div class="section" id="radioSection">
+      <h2>Radios</h2>
+      <input type="text" id="radioInput" placeholder="Enter Radio Serial" />
+      <button onclick="scan('radioInput')">Scan</button>
+      <button onclick="addItem('radio')">Add</button>
+      <ul id="radioList"></ul>
     </div>
 
-    <!-- Panasonics -->
-    <div class="input-row">
-      <input type="text" id="panasonic-input" placeholder="Enter Panasonic Serial">
-      <button onclick="addSerial('panasonic')">Add</button>
-      <button onclick="scanSerial('panasonic')">Scan</button>
-      <ul id="panasonic-list"></ul>
+    <div class="section" id="panasonicSection">
+      <h2>Panasonics</h2>
+      <input type="text" id="panasonicInput" placeholder="Enter Serial" />
+      <button onclick="scan('panasonicInput')">Scan</button>
+      <button onclick="addItem('panasonic')">Add</button>
+      <ul id="panasonicList"></ul>
     </div>
 
-    <!-- Zebras -->
-    <div class="input-row">
-      <input type="text" id="zebra-input" placeholder="Enter Zebra Serial">
-      <button onclick="addSerial('zebra')">Add</button>
-      <button onclick="scanSerial('zebra')">Scan</button>
-      <ul id="zebra-list"></ul>
+    <div class="section" id="zebraSection">
+      <h2>Zebras</h2>
+      <input type="text" id="zebraInput" placeholder="Enter Serial" />
+      <button onclick="scan('zebraInput')">Scan</button>
+      <button onclick="addItem('zebra')">Add</button>
+      <ul id="zebraList"></ul>
     </div>
 
-    <!-- Fingers -->
-    <div class="input-row">
-      <input type="text" id="finger-input" placeholder="Enter Finger Serial">
-      <button onclick="addSerial('finger')">Add</button>
-      <button onclick="scanSerial('finger')">Scan</button>
-      <ul id="finger-list"></ul>
+    <div class="section" id="fingerSection">
+      <h2>Fingers</h2>
+      <input type="text" id="fingerInput" placeholder="Enter Serial" />
+      <button onclick="scan('fingerInput')">Scan</button>
+      <button onclick="addItem('finger')">Add</button>
+      <ul id="fingerList"></ul>
     </div>
 
-    <!-- Honeywell Printers -->
-    <div class="input-row">
-      <input type="text" id="honeywell-input" placeholder="Enter Honeywell Printer Serial">
-      <button onclick="addSerial('honeywell')">Add</button>
-      <button onclick="scanSerial('honeywell')">Scan</button>
-      <ul id="honeywell-list"></ul>
+    <div class="section" id="printerSection">
+      <h2>Honeywell Printers</h2>
+      <input type="text" id="printerInput" placeholder="Enter Serial" />
+      <button onclick="scan('printerInput')">Scan</button>
+      <button onclick="addItem('printer')">Add</button>
+      <ul id="printerList"></ul>
     </div>
 
-    <!-- Express Scanners -->
-    <div class="input-row">
-      <input type="text" id="express-input" placeholder="Enter Express Scanner Serial">
-      <button onclick="addSerial('express')">Add</button>
-      <button onclick="scanSerial('express')">Scan</button>
-      <ul id="express-list"></ul>
+    <div class="section" id="expressScannerSection">
+      <h2>Express Scanners</h2>
+      <input type="text" id="expressScannerInput" placeholder="Enter Serial" />
+      <button onclick="scan('expressScannerInput')">Scan</button>
+      <button onclick="addItem('expressScanner')">Add</button>
+      <ul id="expressScannerList"></ul>
     </div>
 
-    <!-- Express Finger Scanners -->
-    <div class="input-row">
-      <input type="text" id="expressfinger-input" placeholder="Enter Express Finger Serial">
-      <button onclick="addSerial('expressfinger')">Add</button>
-      <button onclick="scanSerial('expressfinger')">Scan</button>
-      <ul id="expressfinger-list"></ul>
+    <div class="section" id="expressFingerSection">
+      <h2>Express Finger Scanners</h2>
+      <input type="text" id="expressFingerInput" placeholder="Enter Serial" />
+      <button onclick="scan('expressFingerInput')">Scan</button>
+      <button onclick="addItem('expressFinger')">Add</button>
+      <ul id="expressFingerList"></ul>
     </div>
 
-    <!-- Radio Batteries On Hand -->
-    <div class="input-row">
-      <input type="number" id="batteries-input" placeholder="Batteries On Hand" max="99">
-      <button onclick="addBatteryCount()">Add</button>
-      <ul id="batteries-list"></ul>
+    <div class="section" id="batterySection">
+      <h2>Radio Batteries On Hand</h2>
+      <input type="number" id="batteryInput" max="99" placeholder="##" />
+      <button onclick="addItem('battery')">Add</button>
+      <ul id="batteryList"></ul>
     </div>
 
-    <!-- Camera Modal -->
-    <div id="camera-modal">
-      <div style="width:90%; max-width:400px;">
-        <div id="scanner"></div>
-        <button onclick="closeScanner()" style="margin-top:10px; display:block; width:100%;">Close Scanner</button>
-      </div>
-    </div>
-
-    <!-- Export Button -->
-    <button onclick="exportPDF()" style="background-color: #e67e22; display: block; width: 100%; margin-top: 20px; padding: 12px;">
-      Export PDF
-    </button>
+    <button onclick="exportPDF()">Export PDF</button>
   </div>
 
+  <script src="https://unpkg.com/html2pdf.js@0.9.2/dist/html2pdf.bundle.min.js"></script>
+  <script src="https://unpkg.com/@zxing/library@latest"></script>
   <script>
-    const storageKeys = ["radio", "panasonic", "zebra", "finger", "honeywell", "express", "expressfinger"];
+    const storageKey = "fedexAuditData";
+    const data = JSON.parse(localStorage.getItem(storageKey)) || {
+      radio: [],
+      panasonic: [],
+      zebra: [],
+      finger: [],
+      printer: [],
+      expressScanner: [],
+      expressFinger: [],
+      battery: []
+    };
 
-    function loadSaved() {
-      storageKeys.forEach(type => {
-        const list = JSON.parse(localStorage.getItem(type)) || [];
-        list.forEach(serial => appendToList(type, serial));
+    function addItem(type) {
+      const input = document.getElementById(`${type}Input`);
+      const value = input.value.trim();
+      if (!value) return;
+
+      data[type].push(value);
+      input.value = '';
+      saveData();
+      renderList(type);
+    }
+
+    function saveData() {
+      localStorage.setItem(storageKey, JSON.stringify(data));
+    }
+
+    function renderList(type) {
+      const list = document.getElementById(`${type}List`);
+      list.innerHTML = '';
+      data[type].forEach(item => {
+        const li = document.createElement("li");
+        li.textContent = item;
+        list.appendChild(li);
       });
-
-      const batteryCount = localStorage.getItem("batteries");
-      if (batteryCount) appendToList("batteries", batteryCount);
-    }
-
-    function addSerial(type, value) {
-      const input = document.getElementById(`${type}-input`);
-      const val = value || input.value.trim();
-      if (!val) return;
-      const list = JSON.parse(localStorage.getItem(type)) || [];
-      list.push(val);
-      localStorage.setItem(type, JSON.stringify(list));
-      appendToList(type, val);
-      input.value = "";
-    }
-
-    function appendToList(type, val) {
-      const ul = document.getElementById(`${type}-list`);
-      const li = document.createElement("li");
-      li.textContent = val;
-      ul.appendChild(li);
-    }
-
-    function addBatteryCount() {
-      const input = document.getElementById("batteries-input");
-      const val = input.value.trim();
-      if (!val) return;
-      localStorage.setItem("batteries", val);
-      document.getElementById("batteries-list").innerHTML = "";
-      appendToList("batteries", val);
-      input.value = "";
-    }
-
-    let currentScanType = null;
-    let html5QrCode = null;
-
-    function scanSerial(type) {
-      currentScanType = type;
-      document.getElementById("camera-modal").style.display = "flex";
-      html5QrCode = new Html5Qrcode("scanner");
-      html5QrCode.start(
-        { facingMode: "environment" },
-        {
-          fps: 10,
-          qrbox: 250
-        },
-        (decodedText, decodedResult) => {
-          html5QrCode.stop().then(() => {
-            document.getElementById("camera-modal").style.display = "none";
-            addSerial(currentScanType, decodedText);
-          }).catch(err => console.error("Stop error", err));
-        },
-        (errorMessage) => {
-          // Ignoring scan errors
-        }
-      ).catch(err => console.error("Start error", err));
-    }
-
-    function closeScanner() {
-      if (html5QrCode) {
-        html5QrCode.stop().then(() => {
-          html5QrCode.clear();
-          document.getElementById("camera-modal").style.display = "none";
-        }).catch(err => {
-          console.error("Stop error", err);
-        });
-      } else {
-        document.getElementById("camera-modal").style.display = "none";
-      }
     }
 
     function exportPDF() {
-      alert("PDF export functionality would be implemented here.\nAll data is saved in localStorage.");
+      html2pdf().from(document.getElementById("app")).save("FedEx-Audit.pdf");
     }
 
-    window.onload = loadSaved;
+    function scan(inputId) {
+      const codeReader = new ZXing.BrowserBarcodeReader();
+      codeReader.decodeOnceFromVideoDevice(undefined, inputId).then(result => {
+        document.getElementById(inputId).value = result.text;
+      }).catch(err => {
+        alert("Scan failed: " + err);
+      });
+    }
+
+    Object.keys(data).forEach(renderList);
+  </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js');
+      });
+    }
   </script>
 </body>
 </html>
